@@ -1,14 +1,17 @@
 from django.shortcuts import render
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from .models import Event
 from .serializers import EventSerializer
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import BasicAuthentication
+import base64
+
+from django.core.files.base import ContentFile
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getEvent(request, pk=None):
     id = pk
     if id is not None:
@@ -21,6 +24,7 @@ def getEvent(request, pk=None):
 
 
 @api_view(['POST'])
+# @permission_classes([IsAuthenticated])
 def createEvent(request):
     serializer = EventSerializer(data=request.data)
     if serializer.is_valid():
@@ -30,6 +34,7 @@ def createEvent(request):
 
 
 @api_view(['PUT'])
+# @permission_classes([IsAuthenticated])
 def completeUpdateEvent(request, pk=None):
     id = pk
     event =Event.objects.get(id=id)
@@ -41,6 +46,7 @@ def completeUpdateEvent(request, pk=None):
 
 
 @api_view(['PATCH'])
+# @permission_classes([IsAuthenticated])
 def partialUpdateEvent(request, pk=None):
     id = pk
     event = Event.objects.get(pk=id)
@@ -52,6 +58,7 @@ def partialUpdateEvent(request, pk=None):
 
 
 @api_view(['DELETE'])
+# @permission_classes([IsAuthenticated])
 def deleteEvent(request, pk=None):
     id = pk
     event = Event.objects.get(pk=id)
