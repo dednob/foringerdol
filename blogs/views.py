@@ -25,7 +25,7 @@ def getBlogDetail(request, pk):
     return Response(serializer.data)
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def create_blog(request):
     serializer = BlogSerializer(data = request.data)
     if serializer.is_valid():
@@ -34,7 +34,7 @@ def create_blog(request):
             fmt, img_str = str(serializer['profile_photo']).split(';base64,')
             ext = fmt.split('/')[-1]
             img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
-            serializer['profile_photo'] = img_file
+            serializer['blog_image'] = img_file
     
             
         return Response(serializer.data)
