@@ -6,12 +6,11 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 import base64
-
 from django.core.files.base import ContentFile
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def blog_list(request):
     blog = Blog.objects.all()
     serializer = BlogSerializer(blog, many = True)
@@ -31,7 +30,7 @@ def create_blog(request):
     if serializer.is_valid():
         serializer.save()
         if 'blog_image' in serializer:
-            fmt, img_str = str(serializer['profile_photo']).split(';base64,')
+            fmt, img_str = str(serializer['blog_image']).split(';base64,')
             ext = fmt.split('/')[-1]
             img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
             serializer['blog_image'] = img_file
