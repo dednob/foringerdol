@@ -8,6 +8,7 @@ urlpatterns = [
     path('locations/', include('locations.urls')),
     path('hotels/', include('hotels.urls')),
     path('events/', include('events.urls')),
+    path('tours/', include('tours.urls')),
 
 
     # path('detail/', product_views.product_detail, name="Product detail"),
