@@ -10,7 +10,7 @@ from django.core.files.base import ContentFile
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def location_api_viewLocation(request, pk=None):
     id = pk
     if id is not None:
@@ -22,6 +22,20 @@ def location_api_viewLocation(request, pk=None):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+def location_by_category(request, pk):    
+    location = Location.objects.filter(category = pk)
+    serializer = LocationSerializer(location, many=True)
+    return Response(serializer.data)
+    
+
+@api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+def viewInternationalLocations(request):    
+    location = Location.objects.filter(category = 'international')
+    serializer = LocationSerializer(location, many=True)
+    return Response(serializer.data)
 
 
 @api_view(['POST'])

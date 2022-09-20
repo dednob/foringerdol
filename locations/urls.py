@@ -5,7 +5,10 @@ app_name = 'locations'
 
 urlpatterns = [
     path('viewLocation/', views.location_api_viewLocation),
-    path('viewLocation/<int:pk>', views.location_api_viewLocation),
+   
+    path('view/<str:pk>', views.location_by_category),
+    
+    path('details/<int:pk>', views.location_api_viewLocation),
     path('createLocation/', views.location_api_createLocation),
     path('completeUpdate/<int:pk>', views.location_api_completeUpdate),
     path('partialUpdate/<int:pk>', views.location_api_partialUpdate),

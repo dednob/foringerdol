@@ -10,8 +10,9 @@ import base64
 from django.core.files.base import ContentFile
 
 
+
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def getEvent(request, pk=None):
     id = pk
     if id is not None:
@@ -22,6 +23,15 @@ def getEvent(request, pk=None):
     serializer = EventSerializer(events, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+def events_by_location(request, locationid):
+    locationid = locationid
+    events = Event.objects.filter(location= locationid)
+    serializer = EventSerializer(events, many=True)
+    return Response(serializer.data)
+    # events = Event.objects.all()
+    # serializer = EventSerializer(events, many=True)
+    # return Response(serializer.data)
 
 @api_view(['POST'])
 # @permission_classes([IsAuthenticated])
@@ -29,6 +39,11 @@ def createEvent(request):
     serializer = EventSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
+        if 'event_image' in serializer:
+            fmt, img_str = str(serializer['event_image']).split(';base64,')
+            ext = fmt.split('/')[-1]
+            img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+            serializer['event_image'] = img_file
         return Response({'msg': 'Data Created'}, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -41,6 +56,11 @@ def completeUpdateEvent(request, pk=None):
     serializer = EventSerializer(event, data=request.data)
     if serializer.is_valid():
         serializer.save()
+        if 'event_image' in serializer:
+            fmt, img_str = str(serializer['event_image']).split(';base64,')
+            ext = fmt.split('/')[-1]
+            img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+            serializer['event_image'] = img_file
         return Response({'msg': 'Complete Data Updated'})
     return Response(serializer.errors)
 

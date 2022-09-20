@@ -28,7 +28,12 @@ def createTour(request):
     serializer = TourSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return Response({'msg': 'Data Created'}, status=status.HTTP_201_CREATED)
+        if 'tour_image' in serializer:
+            fmt, img_str = str(serializer['tour_image']).split(';base64,')
+            ext = fmt.split('/')[-1]
+            img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+            serializer['tour_image'] = img_file
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -40,7 +45,12 @@ def completeUpdateTour(request, pk=None):
     serializer = TourSerializer(tour, data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return Response({'msg': 'Complete Data Updated'})
+        if 'tour_image' in serializer:
+            fmt, img_str = str(serializer['tour_image']).split(';base64,')
+            ext = fmt.split('/')[-1]
+            img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+            serializer['tour_image'] = img_file
+        return Response({'msg': 'Complete Data Updated', 'data': serializer.data})
     return Response(serializer.errors)
 
 

@@ -29,7 +29,12 @@ def createHotel(request):
     serializer = HotelSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return Response({'msg': 'Data Created'}, status=status.HTTP_201_CREATED)
+        if 'hotel_image' in serializer:
+            fmt, img_str = str(serializer['hotel_image']).split(';base64,')
+            ext = fmt.split('/')[-1]
+            img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+            serializer['hotel_image'] = img_file
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -41,7 +46,12 @@ def completeUpdateHotel(request, pk=None):
     serializer = HotelSerializer(hotel, data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return Response({'msg': 'Complete Data Updated'})
+        if 'hotel_image' in serializer:
+            fmt, img_str = str(serializer['hotel_image']).split(';base64,')
+            ext = fmt.split('/')[-1]
+            img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+            serializer['hotel_image'] = img_file
+        return Response(serializer.data)
     return Response(serializer.errors)
 
 

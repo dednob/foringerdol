@@ -6,6 +6,7 @@ app_name = 'events'
 urlpatterns = [
     path('viewEvent/', views.getEvent),
     path('viewEvent/<int:pk>', views.getEvent),
+    path('events_by_location/<int:locationid>', views.events_by_location),
     path('createEvent/', views.createEvent),
     path('completeUpdate/<int:pk>', views.completeUpdateEvent),
     path('partialUpdate/<int:pk>', views.partialUpdateEvent),
