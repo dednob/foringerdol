@@ -4,14 +4,14 @@ from . import views
 app_name = 'locations'
 
 urlpatterns = [
-    path('viewLocation/', views.location_api_viewLocation),
+    path('view/list/', views.view_location),
    
-    path('view/<str:pk>', views.location_by_category),
+    path('view/by-category/<str:pk>', views.location_by_category),
     
-    path('details/<int:pk>', views.location_api_viewLocation),
-    path('createLocation/', views.location_api_createLocation),
-    path('completeUpdate/<int:pk>', views.location_api_completeUpdate),
-    path('partialUpdate/<int:pk>', views.location_api_partialUpdate),
-    path('deleteLocation/<int:pk>', views.location_api_delete),
+    path('details/<int:pk>', views.view_location),
+    path('create/', views.create_location),
+    path('update/<int:pk>', views.complete_update),
+    path('partialUpdate/<int:pk>', views.partial_update),
+    path('delete/<int:pk>', views.delete_location),
 
 ]

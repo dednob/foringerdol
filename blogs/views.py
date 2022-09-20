@@ -17,14 +17,14 @@ def blog_list(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def getBlogDetail(request, pk):
+# @permission_classes([IsAuthenticated])
+def get_blog_detail(request, pk):
     blog = Blog.objects.get(id=pk)
     serializer = BlogSerializer(blog)
     return Response(serializer.data)
 
 @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def create_blog(request):
     blog_data = request.data
     if 'blog_image' in blog_data:
@@ -38,11 +38,18 @@ def create_blog(request):
         return Response(serializer.data)
     
 
-@api_view(['PUT'])
+@api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
 def update_blog(request, pk):
+    blog_data = request.data
+    if 'blog_image' in blog_data:
+        fmt, img_str = str(blog_data['blog_image']).split(';base64,')
+        ext = fmt.split('/')[-1]
+        img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+        blog_data['blog_image'] = img_file
+
     blog = Blog.objects.get(id=pk)
-    serializer = BlogSerializer(blog, data = request.data, partial = True)
+    serializer = BlogSerializer(blog, data = blog_data, partial = True)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
