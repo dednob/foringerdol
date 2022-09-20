@@ -30,12 +30,6 @@ def location_by_category(request, pk):
     return Response(serializer.data)
     
 
-@api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-def viewInternationalLocations(request):    
-    location = Location.objects.filter(category = 'international')
-    serializer = LocationSerializer(location, many=True)
-    return Response(serializer.data)
 
 
 @api_view(['POST'])
