@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'hotels',
     'events',
     'tours',
+    
 ]
 
 MIDDLEWARE = [

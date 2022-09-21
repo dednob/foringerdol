@@ -64,7 +64,7 @@ def create_hotel(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['PUT'])
+@api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
 def complete_update_hotel(request, pk=None):
     hotel_data = request.data
