@@ -56,10 +56,11 @@ def create_event(request):
         slug = "%s-%s" % (slugify(event_data['event_name']), suffix)
             
     event_data['slug']=slug
+    
     serializer = EventSerializer(data=event_data)
     if serializer.is_valid():
         serializer.save()        
-        return Response({'msg': 'Data Created'}, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
