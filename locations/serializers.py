@@ -12,4 +12,5 @@ class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
         fields = ['locations_name', 'category', 'details', 'slug', 'location_image','events']
-  
+
+    

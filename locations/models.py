@@ -19,4 +19,8 @@ class Location(models.Model):
     slug = models.SlugField(max_length=255, null=True, unique=True)
     category = models.CharField(max_length=50, choices=choices, default='domestic')
 
+
+    def __str__(self):
+        return self.locations_name
+
     
