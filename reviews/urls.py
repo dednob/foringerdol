@@ -6,8 +6,8 @@ app_name = 'reviews'
 
 urlpatterns = [
     
-    path('getreviewlist/',views.review_list , name='createBlog'),
-    path('postreview/',views.create_review , name='createBlog'),
+    path('list/',views.review_list , name='createBlog'),
+    path('create/',views.create_review , name='createBlog'),
     
      
 ]

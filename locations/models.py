@@ -15,6 +15,6 @@ class Location(models.Model):
                ]
     locations_name = models.CharField(max_length=200)
     location_image = models.ImageField(upload_to=generate_filename, null=True)
-    details = models.CharField(max_length=1500)
-    slug = models.SlugField(max_length=255)
+    details = models.TextField(null=True,max_length=1500)
+    slug = models.SlugField(max_length=255, null=True, unique=True)
     category = models.CharField(max_length=50, choices=choices, default='domestic')

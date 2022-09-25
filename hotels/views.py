@@ -7,12 +7,13 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 import base64
 from django.core.files.base import ContentFile
+from django.utils.text import slugify
 
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def getHotel(request, pk=None):
+# @permission_classes([IsAuthenticated])
+def get_hotel(request, pk=None):
     id = pk
     if id is not None:
         hotel = Hotel.objects.get(id=id)
@@ -22,42 +23,69 @@ def getHotel(request, pk=None):
     serializer = HotelSerializer(hotels, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+def hotels_by_location(request, locationid):
+    locationid = locationid
+    hotels = Hotel.objects.filter(location= locationid)
+    serializer = HotelSerializer(hotels, many=True)
+    return Response(serializer.data)
+
 
 @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
-def createHotel(request):
-    serializer = HotelSerializer(data=request.data)
+@permission_classes([IsAuthenticated])
+def create_hotel(request):
+    hotel_data = request.data
+    if 'hotel_image' in hotel_data:
+        fmt, img_str = str(hotel_data['hotel_image']).split(';base64,')
+        ext = fmt.split('/')[-1]
+        img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+        hotel_data['hotel_image'] = img_file
+    
+    slug = slugify(hotel_data['hotel_name'])
+    suffix=1
+    # slug = "%s-%s" % (slugify(location_data['locations_name']), suffix)
+    if Hotel.objects.filter(hotel_name__exact=slug).exists():
+        count=Hotel.objects.filter(hotel_name__exact=slug).count()
+        print(count)
+        suffix+=count
+        print("yes")
+        slug = "%s-%s" % (slugify(hotel_data['hotel_name']), suffix)
+      
+    else:
+        slug = "%s-%s" % (slugify(hotel_data['hotel_name']), suffix)
+            
+    hotel_data['slug']=slug
+
+    serializer = HotelSerializer(data=hotel_data)
     if serializer.is_valid():
         serializer.save()
-        if 'hotel_image' in serializer:
-            fmt, img_str = str(serializer['hotel_image']).split(';base64,')
-            ext = fmt.split('/')[-1]
-            img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
-            serializer['hotel_image'] = img_file
+        
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['PUT'])
-# @permission_classes([IsAuthenticated])
-def completeUpdateHotel(request, pk=None):
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def complete_update_hotel(request, pk=None):
+    hotel_data = request.data
+    if 'hotel_image' in hotel_data:
+        fmt, img_str = str(hotel_data['hotel_image']).split(';base64,')
+        ext = fmt.split('/')[-1]
+        img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+        hotel_data['hotel_image'] = img_file
+        
     id = pk
     hotel = Hotel.objects.get(id=id)
     serializer = HotelSerializer(hotel, data=request.data)
     if serializer.is_valid():
         serializer.save()
-        if 'hotel_image' in serializer:
-            fmt, img_str = str(serializer['hotel_image']).split(';base64,')
-            ext = fmt.split('/')[-1]
-            img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
-            serializer['hotel_image'] = img_file
         return Response(serializer.data)
     return Response(serializer.errors)
 
 
 @api_view(['PATCH'])
-# @permission_classes([IsAuthenticated])
-def partialUpdateHotel(request, pk=None):
+@permission_classes([IsAuthenticated])
+def partial_update_hotel(request, pk=None):
     id = pk
     hotel = Hotel.objects.get(pk=id)
     serializer = HotelSerializer(hotel, data=request.data, partial=True)
@@ -68,8 +96,8 @@ def partialUpdateHotel(request, pk=None):
 
 
 @api_view(['DELETE'])
-# @permission_classes([IsAuthenticated])
-def deleteHotel(request, pk=None):
+@permission_classes([IsAuthenticated])
+def delete_hotel(request, pk=None):
     id = pk
     hotel = Hotel.objects.get(pk=id)
     hotel.delete()

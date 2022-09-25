@@ -4,11 +4,12 @@ from . import views
 app_name = 'tours'
 
 urlpatterns = [
-    path('viewTour/', views.getTour),
-    path('viewTour/<int:pk>', views.getTour),
-    path('createTour/', views.createTour),
-    path('completeUpdate/<int:pk>', views.completeUpdateTour),
-    path('partialUpdate/<int:pk>', views.partialUpdateTour),
-    path('deleteTour/<int:pk>', views.deleteTour),
+    path('list/', views.get_tour),
+    path('details/<int:pk>', views.get_tour),
+    path('bylocation/<int:locationid>', views.tours_by_location),
+    path('create/', views.create_tour),
+    path('update/<int:pk>', views.complete_update_tour),
+    path('partialupdate/<int:pk>', views.partial_update_tour),
+    path('delete/<int:pk>', views.delete_tour),
 
 ]
