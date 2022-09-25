@@ -1,11 +1,11 @@
 import uuid
 from django.db import models
 
-def generate_filename(instance, filename):
-   extension = filename.split('.')[-1]
-   new_filename = "foringLocation_%s.%s" % (uuid.uuid4(), extension)
-   return new_filename
 
+def generate_filename(instance, filename):
+    extension = filename.split('.')[-1]
+    new_filename = "foringLocation_%s.%s" % (uuid.uuid4(), extension)
+    return new_filename
 
 
 # Create your models here.
@@ -18,5 +18,3 @@ class Location(models.Model):
     details = models.CharField(max_length=1500)
     slug = models.SlugField(max_length=255)
     category = models.CharField(max_length=50, choices=choices, default='domestic')
-
-    

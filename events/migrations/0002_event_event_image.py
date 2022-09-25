@@ -2,9 +2,13 @@
 
 from django.db import migrations, models
 import events.models
-
+import uuid
 
 class Migration(migrations.Migration):
+    def generate_filename(instance, filename):
+        extension = filename.split('.')[-1]
+        new_filename = "foringLocation_%s.%s" % (uuid.uuid4(), extension)
+        return new_filename
 
     dependencies = [
         ('events', '0001_initial'),
