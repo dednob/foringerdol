@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from .models import Event
-from .serializers import EventSerializer
+from .serializers import *
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 import base64
@@ -21,14 +21,14 @@ def get_events(request, pk=None):
         serializer = EventSerializer(event)
         return Response(serializer.data)
     events = Event.objects.all()
-    serializer = EventSerializer(events, many=True)
+    serializer = EventReadSerializer(events, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
 def events_by_location(request, locationid):
     locationid = locationid
     events = Event.objects.filter(location= locationid)
-    serializer = EventSerializer(events, many=True)
+    serializer = EventReadSerializer(events, many=True)
     return Response(serializer.data)
     
 
@@ -41,6 +41,12 @@ def create_event(request):
         ext = fmt.split('/')[-1]
         img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
         event_data['event_image'] = img_file
+    
+    if 'banner_image' in event_data:
+        fmt, img_str = str(event_data['banner_image']).split(';base64,')
+        ext = fmt.split('/')[-1]
+        img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+        event_data['banner_image'] = img_file
 
     slug = slugify(event_data['event_name'])
     suffix=1
@@ -76,6 +82,12 @@ def complete_update_event(request, pk=None):
         ext = fmt.split('/')[-1]
         img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
         event_data['event_image'] = img_file
+    
+    if 'banner_image' in event_data:
+        fmt, img_str = str(event_data['banner_image']).split(';base64,')
+        ext = fmt.split('/')[-1]
+        img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+        event_data['banner_image'] = img_file
 
     event =Event.objects.get(id=id)
     serializer = EventSerializer(event, data= event_data)

@@ -32,6 +32,13 @@ def create_blog(request):
         ext = fmt.split('/')[-1]
         img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
         blog_data['blog_image'] = img_file
+    
+    if 'banner_image' in blog_data:
+        fmt, img_str = str(blog_data['banner_image']).split(';base64,')
+        ext = fmt.split('/')[-1]
+        img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+        blog_data['banner_image'] = img_file
+
     serializer = BlogSerializer(data = blog_data)
     if serializer.is_valid():
         serializer.save()    
@@ -47,6 +54,12 @@ def update_blog(request, pk):
         ext = fmt.split('/')[-1]
         img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
         blog_data['blog_image'] = img_file
+    
+    if 'banner_image' in blog_data:
+        fmt, img_str = str(blog_data['banner_image']).split(';base64,')
+        ext = fmt.split('/')[-1]
+        img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+        blog_data['banner_image'] = img_file
 
     blog = Blog.objects.get(id=pk)
     serializer = BlogSerializer(blog, data = blog_data, partial = True)

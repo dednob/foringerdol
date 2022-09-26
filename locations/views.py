@@ -43,6 +43,12 @@ def create_location(request):
         ext = fmt.split('/')[-1]
         img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
         location_data['location_image'] = img_file
+
+    if 'banner_image' in location_data:
+        fmt, img_str = str(location_data['banner_image']).split(';base64,')
+        ext = fmt.split('/')[-1]
+        img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+        location_data['banner_image'] = img_file
     
     slug = slugify(location_data['locations_name'])
     suffix=1
@@ -75,6 +81,12 @@ def complete_update(request, pk=None):
         ext = fmt.split('/')[-1]
         img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
         location_data['location_image'] = img_file
+    
+    if 'banner_image' in location_data:
+        fmt, img_str = str(location_data['banner_image']).split(';base64,')
+        ext = fmt.split('/')[-1]
+        img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+        location_data['banner_image'] = img_file
 
     id = pk
     location = Location.objects.get(id=id)

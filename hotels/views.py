@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from .models import Hotel
-from .serializers import HotelSerializer
+from .serializers import *
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 import base64
@@ -27,7 +27,7 @@ def get_hotel(request, pk=None):
 def hotels_by_location(request, locationid):
     locationid = locationid
     hotels = Hotel.objects.filter(location= locationid)
-    serializer = HotelSerializer(hotels, many=True)
+    serializer = HotelReadSerializer(hotels, many=True)
     return Response(serializer.data)
 
 
@@ -40,6 +40,12 @@ def create_hotel(request):
         ext = fmt.split('/')[-1]
         img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
         hotel_data['hotel_image'] = img_file
+
+    if 'banner_image' in hotel_data:
+        fmt, img_str = str(hotel_data['banner_image']).split(';base64,')
+        ext = fmt.split('/')[-1]
+        img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+        hotel_data['banner_image'] = img_file
     
     slug = slugify(hotel_data['hotel_name'])
     suffix=1
@@ -73,6 +79,12 @@ def complete_update_hotel(request, pk=None):
         ext = fmt.split('/')[-1]
         img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
         hotel_data['hotel_image'] = img_file
+
+    if 'banner_image' in hotel_data:
+        fmt, img_str = str(hotel_data['banner_image']).split(';base64,')
+        ext = fmt.split('/')[-1]
+        img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+        hotel_data['banner_image'] = img_file
         
     id = pk
     hotel = Hotel.objects.get(id=id)

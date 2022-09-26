@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from .models import Tour
-from .serializers import TourSerializer
+from .serializers import *
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 import base64
@@ -16,17 +16,17 @@ def get_tour(request, pk=None):
     id = pk
     if id is not None:
         tour = Tour.objects.get(id=id)
-        serializer = TourSerializer(tour)
+        serializer = TourReadSerializer(tour)
         return Response(serializer.data)
     tours = Tour.objects.all()
-    serializer = TourSerializer(tours, many=True)
+    serializer = TourReadSerializer(tours, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
 def tours_by_location(request, locationid):
     locationid = locationid
     tours = Tour.objects.filter(location= locationid)
-    serializer = TourSerializer(tours, many=True)
+    serializer = TourReadSerializer(tours, many=True)
     return Response(serializer.data)
 
 
@@ -40,6 +40,12 @@ def create_tour(request):
         img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
         tour_data['tour_image'] = img_file
     
+    if 'banner_image' in tour_data:
+        fmt, img_str = str(tour_data['banner_image']).split(';base64,')
+        ext = fmt.split('/')[-1]
+        img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+        tour_data['banner_image'] = img_file
+
     slug = slugify(tour_data['tour_name'])
     suffix=1
     # slug = "%s-%s" % (slugify(location_data['locations_name']), suffix)
@@ -73,6 +79,12 @@ def complete_update_tour(request, pk=None):
         ext = fmt.split('/')[-1]
         img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
         tour_data['tour_image'] = img_file
+
+    if 'banner_image' in tour_data:
+        fmt, img_str = str(tour_data['banner_image']).split(';base64,')
+        ext = fmt.split('/')[-1]
+        img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
+        tour_data['banner_image'] = img_file
 
     id = pk
     tour = Tour.objects.get(id=id)

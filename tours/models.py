@@ -12,6 +12,7 @@ def generate_filename(instance, filename):
 class Tour(models.Model):
     tour_name = models.CharField(max_length=200)
     tour_image = models.ImageField(upload_to=generate_filename, null=True)
+    banner_image = models.ImageField(upload_to=generate_filename, null=True)
     price = models.FloatField()
     details = models.TextField(null=True)
     no_of_days = models.IntegerField()

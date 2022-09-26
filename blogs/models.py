@@ -14,4 +14,5 @@ class Blog(models.Model):
     title = models.CharField(max_length=500)
     story = models.TextField()
     blog_image = models.ImageField(upload_to=generate_filename, null=True)
+    banner_image = models.ImageField(upload_to=generate_filename, null=True)
 # Create your models here.
