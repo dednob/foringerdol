@@ -3,7 +3,11 @@ from .models import Tour
 
 
 class TourSerializer(serializers.ModelSerializer):
-    location = serializers.StringRelatedField()
+    location = serializers.SerializerMethodField('location_name')
+
+    def location_name(self, obj):
+        return {obj.location.locations_name,
+                obj.location.id}
     class Meta:
         model = Tour
-        fields = ['tour_name','tour_image', 'price', 'location', 'details', 'no_of_days','slug']
+        fields = ['id', 'tour_name', 'tour_image', 'price', 'location', 'details', 'no_of_days']

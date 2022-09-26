@@ -58,8 +58,10 @@ def create_event(request):
     event_data['slug']=slug
     
     serializer = EventSerializer(data=event_data)
+    print(serializer)
     if serializer.is_valid():
-        serializer.save()        
+        serializer.save()
+
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

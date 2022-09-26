@@ -1,11 +1,11 @@
 import uuid
 from django.db import models
 
-def generate_filename(instance, filename):
-   extension = filename.split('.')[-1]
-   new_filename = "foringLocation_%s.%s" % (uuid.uuid4(), extension)
-   return new_filename
 
+def generate_filename(instance, filename):
+    extension = filename.split('.')[-1]
+    new_filename = "foringLocation_%s.%s" % (uuid.uuid4(), extension)
+    return new_filename
 
 
 # Create your models here.
