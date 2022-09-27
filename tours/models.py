@@ -17,4 +17,4 @@ class Tour(models.Model):
     details = models.TextField(null=True)
     no_of_days = models.IntegerField()
     slug = models.SlugField(max_length=255, null=True, unique=True)
-    location = models.ForeignKey(Location, default=None, on_delete=models.DO_NOTHING)
+    location = models.ForeignKey(Location, default=None, on_delete=models.CASCADE)

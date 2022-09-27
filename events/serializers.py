@@ -1,15 +1,16 @@
 from rest_framework import serializers
 from .models import Event
-
+from locations.models import *
+from locations.serializers import *
 
 class EventReadSerializer(serializers.ModelSerializer):
     
-    
     location = serializers.SerializerMethodField('location_name',  read_only = True)
 
-    def location_name(self, obj):
-        return {obj.location.locations_name,
-                obj.location.id}
+    def location_name(self, obj): 
+        location_instance = Location.objects.get(id=obj.location.id)
+        
+        return LocationSerializer(location_instance).data
 
     class Meta:
         model = Event

@@ -22,3 +22,20 @@ def create_review(request):
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors)
+
+@api_view(['PATCH'])
+def update_review(request, pk):
+    rev_data = request.data
+    review = Review.objects.get(id=pk)
+    serializer = ReviewSerializer(review, data = rev_data, partial = True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors)
+
+@api_view(['DELETE'])
+# @permission_classes([IsAuthenticated])
+def delete_review(request,pk):
+    review = Review.objects.get(id=pk)
+    review.delete()
+    return Response('Deleted')

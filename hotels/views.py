@@ -17,10 +17,10 @@ def get_hotel(request, pk=None):
     id = pk
     if id is not None:
         hotel = Hotel.objects.get(id=id)
-        serializer = HotelSerializer(hotel)
+        serializer = HotelReadSerializer(hotel)
         return Response(serializer.data)
     hotels = Hotel.objects.all()
-    serializer = HotelSerializer(hotels, many=True)
+    serializer = HotelReadSerializer(hotels, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
