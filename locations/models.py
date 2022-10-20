@@ -21,7 +21,7 @@ class Location(models.Model):
     category = models.CharField(max_length=50, choices=choices, default='domestic')
 
 
-    # def __str__(self):
-    #     return self.locations_name
+    def __str__(self):
+        return self.locations_name
 
     
