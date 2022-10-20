@@ -11,5 +11,6 @@ urlpatterns = [
     path('update/<int:pk>', views.complete_update_event),
     path('partialUpdate/<int:pk>', views.partial_update_event),
     path('delete/<int:pk>', views.delete_event),
+    path('trending/', views.trending_event),
 
 ]

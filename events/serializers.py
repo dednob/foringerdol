@@ -14,7 +14,7 @@ class EventReadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = [ 'id','event_name', 'event_image','banner_image', 'location', 'details', 'slug']
+        fields = [ 'id','event_name', 'trending', 'event_image','banner_image', 'location', 'details', 'slug']
 
 class EventSerializer(serializers.ModelSerializer):
     
@@ -22,4 +22,4 @@ class EventSerializer(serializers.ModelSerializer):
    
     class Meta:
         model = Event
-        fields = [ 'id','event_name', 'event_image','banner_image', 'location', 'details', 'slug']
+        fields = [ 'id','event_name','trending', 'event_image','banner_image', 'location', 'details', 'slug']

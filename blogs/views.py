@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 import base64
 from django.core.files.base import ContentFile
+from django.utils.text import slugify
 
 
 @api_view(['GET'])
@@ -38,6 +39,21 @@ def create_blog(request):
         ext = fmt.split('/')[-1]
         img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
         blog_data['banner_image'] = img_file
+    
+    # slug = slugify(blog_data['title'])
+    suffix=1
+    # slug = "%s-%s" % (slugify(location_data['locations_name']), suffix)
+    if Blog.objects.filter(title__exact=blog_data['title']).exists():
+        count=Blog.objects.filter(title__exact=blog_data['title']).count()
+        print(count)
+        suffix+=count
+        print("yes")
+        slug = "%s-%s" % (slugify(blog_data['title']), suffix)
+      
+    else:
+        slug = "%s-%s" % (slugify(blog_data['title']), suffix)
+            
+    blog_data['slug']=slug
 
     serializer = BlogSerializer(data = blog_data)
     if serializer.is_valid():
@@ -60,6 +76,21 @@ def update_blog(request, pk):
         ext = fmt.split('/')[-1]
         img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
         blog_data['banner_image'] = img_file
+    
+     # slug = slugify(blog_data['title'])
+    suffix=1
+    # slug = "%s-%s" % (slugify(location_data['locations_name']), suffix)
+    if Blog.objects.filter(title__exact=blog_data['title']).exists():
+        count=Blog.objects.filter(title__exact=blog_data['title']).count()
+        print(count)
+        suffix+=count
+        print("yes")
+        slug = "%s-%s" % (slugify(blog_data['title']), suffix)
+      
+    else:
+        slug = "%s-%s" % (slugify(blog_data['title']), suffix)
+            
+    blog_data['slug']=slug
 
     blog = Blog.objects.get(id=pk)
     serializer = BlogSerializer(blog, data = blog_data, partial = True)

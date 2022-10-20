@@ -18,7 +18,7 @@ def get_events(request, pk=None):
     id = pk
     if id is not None:
         event = Event.objects.get(id=id)
-        serializer = EventSerializer(event)
+        serializer = EventReadSerializer(event)
         return Response(serializer.data)
     events = Event.objects.all()
     serializer = EventReadSerializer(events, many=True)
@@ -120,3 +120,10 @@ def delete_event(request, pk=None):
 from django.shortcuts import render
 
 # Create your views here.
+
+@api_view(['GET'])
+def trending_event(request):
+    events = Event.objects.filter(trending=True)
+    serializer = EventReadSerializer(events, many=True)
+    return Response(serializer.data)
+
