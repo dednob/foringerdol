@@ -9,6 +9,7 @@ import base64
 from django.utils.text import slugify
 
 from django.core.files.base import ContentFile
+from rest_framework import status
 
 
 
@@ -21,7 +22,7 @@ def get_events(request, pk=None):
             event = Event.objects.get(id=id)
             serializer = EventReadSerializer(event)
             return Response({
-                'code': request.status.HTTP_200_OK,
+                'code': status.HTTP_200_OK,
                 'response': "Received data Successfully",
                 'data': serializer.data
 
@@ -30,7 +31,7 @@ def get_events(request, pk=None):
         events = Event.objects.all()
         serializer = EventReadSerializer(events, many=True)
         return Response({
-                'code': request.status.HTTP_200_OK,
+                'code': status.HTTP_200_OK,
                 'response': "Received data Successfully",
                 'data': serializer.data
 
@@ -38,7 +39,7 @@ def get_events(request, pk=None):
 
     except Exception as e:
         return Response({
-            'code': request.status.HTTP_400_BAD_REQUEST,
+            'code': status.HTTP_400_BAD_REQUEST,
             'response': "Data not found",
             'error': str(e)
         })
@@ -50,7 +51,7 @@ def events_by_location(request, locationid):
         events = Event.objects.filter(location= locationid)
         serializer = EventReadSerializer(events, many=True)
         return Response({
-                'code': request.status.HTTP_200_OK,
+                'code': status.HTTP_200_OK,
                 'response': "Received data Successfully",
                 'data': serializer.data
 
@@ -58,7 +59,7 @@ def events_by_location(request, locationid):
 
     except Exception as e:
         return Response({
-            'code': request.status.HTTP_400_BAD_REQUEST,
+            'code': status.HTTP_400_BAD_REQUEST,
             'response': "Data not found",
             'error': str(e)
         })
@@ -102,21 +103,21 @@ def create_event(request):
             serializer.save()
 
             return Response({
-                'code': request.status.HTTP_200_OK,
+                'code': status.HTTP_200_OK,
                 'response': "Data created successfully",
                 'data': serializer.data
 
             })
         else:
             return Response({
-                'code': request.status.HTTP_400_BAD_REQUEST,
+                'code': status.HTTP_400_BAD_REQUEST,
                 'response': "Data not found",
                 'error': serializer.errors
             })
 
     except Exception as e:
         return Response({
-            'code': request.status.HTTP_400_BAD_REQUEST,
+            'code': status.HTTP_400_BAD_REQUEST,
             'response': "Data not found",
             'error': str(e)
         })
@@ -146,21 +147,21 @@ def complete_update_event(request, pk=None):
             serializer.save()
             
             return Response({
-                'code': request.status.HTTP_200_OK,
+                'code': status.HTTP_200_OK,
                 'response': "Data created successfully",
                 'data': serializer.data
 
             })
         else:
             return Response({
-                'code': request.status.HTTP_400_BAD_REQUEST,
+                'code': status.HTTP_400_BAD_REQUEST,
                 'response': "Data not found",
                 'error': serializer.errors
             })
 
     except Exception as e:
         return Response({
-            'code': request.status.HTTP_400_BAD_REQUEST,
+            'code': status.HTTP_400_BAD_REQUEST,
             'response': "Data not found",
             'error': str(e)
         })
@@ -185,11 +186,11 @@ def delete_event(request, pk=None):
     try: 
         event = Event.objects.get(pk=id)
         event.delete()
-        return Response({'code': request.status.HTTP_200_OK,'msg': 'Data Deleted'})
+        return Response({'code': status.HTTP_200_OK,'msg': 'Data Deleted'})
 
     except Exception as e:
         return Response({
-            'code': request.status.HTTP_400_BAD_REQUEST,
+            'code': status.HTTP_400_BAD_REQUEST,
             'response': "Data not found",
             'error': str(e)
         })
@@ -203,7 +204,7 @@ def trending_event(request):
         events = Event.objects.filter(trending=True)
         serializer = EventReadSerializer(events, many=True)
         return Response({
-                'code': request.status.HTTP_200_OK,
+                'code': status.HTTP_200_OK,
                 'response': "Received data Successfully",
                 'data': serializer.data
 
@@ -211,7 +212,7 @@ def trending_event(request):
 
     except Exception as e:
         return Response({
-            'code': request.status.HTTP_400_BAD_REQUEST,
+            'code': status.HTTP_400_BAD_REQUEST,
             'response': "Data not found",
             'error': str(e)
         })

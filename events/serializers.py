@@ -10,7 +10,7 @@ class EventReadSerializer(serializers.ModelSerializer):
     def location_name(self, obj): 
         location_instance = Location.objects.get(id=obj.location.id)
         
-        return LocationSerializer(location_instance).data
+        return LocationSerializerRef(location_instance).data
 
     class Meta:
         model = Event

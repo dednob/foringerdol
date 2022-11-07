@@ -8,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 import base64
 from django.core.files.base import ContentFile
 from django.utils.text import slugify
+from rest_framework import status
 
 
 @api_view(['GET'])
@@ -19,7 +20,7 @@ def view_location(request, pk=None):
             location = Location.objects.get(id=id)
             serializer = LocationSerializer(location)
             return Response({
-                'code': request.status.HTTP_200_OK,
+                'code': status.HTTP_200_OK,
                 'response': "Received data Successfully",
                 'data': serializer.data
 
@@ -28,7 +29,7 @@ def view_location(request, pk=None):
         locations = Location.objects.all()
         serializer = LocationSerializer(locations, many=True)
         return Response({
-                'code': request.status.HTTP_200_OK,
+                'code': status.HTTP_200_OK,
                 'response': "Received data Successfully",
                 'data': serializer.data
 
@@ -36,7 +37,7 @@ def view_location(request, pk=None):
 
     except Exception as e:
         return Response({
-            'code': request.status.HTTP_400_BAD_REQUEST,
+            'code': status.HTTP_400_BAD_REQUEST,
             'response': "Data not found",
             'error': str(e)
         })
@@ -49,7 +50,7 @@ def location_by_category(request, pk):
         location = Location.objects.filter(category = pk)
         serializer = LocationSerializer(location, many=True)
         return Response({
-                'code': request.status.HTTP_200_OK,
+                'code': status.HTTP_200_OK,
                 'response': "Received data Successfully",
                 'data': serializer.data
 
@@ -57,7 +58,7 @@ def location_by_category(request, pk):
 
     except Exception as e:
         return Response({
-            'code': request.status.HTTP_400_BAD_REQUEST,
+            'code': status.HTTP_400_BAD_REQUEST,
             'response': "Data not found",
             'error': str(e)
         })
@@ -71,7 +72,7 @@ def create_location(request):
     try:
         location_data = request.data
         
-        if 'location_image' in location_data and location_data['event_image']!=None:
+        if 'location_image' in location_data and location_data['location_image']!=None:
             fmt, img_str = str(location_data['location_image']).split(';base64,')
             ext = fmt.split('/')[-1]
             img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
@@ -102,21 +103,21 @@ def create_location(request):
             serializer.save()
             
             return Response({
-                'code': request.status.HTTP_200_OK,
+                'code': status.HTTP_200_OK,
                 'response': "Data created successfully",
                 'data': serializer.data
 
             })
         else:
             return Response({
-                'code': request.status.HTTP_400_BAD_REQUEST,
+                'code': status.HTTP_400_BAD_REQUEST,
                 'response': "Data not found",
                 'error': serializer.errors
             })
 
     except Exception as e:
         return Response({
-            'code': request.status.HTTP_400_BAD_REQUEST,
+            'code':status.HTTP_400_BAD_REQUEST,
             'response': "Data not found",
             'error': str(e)
         })
@@ -146,21 +147,21 @@ def complete_update(request, pk=None):
             serializer.save()
             
             return Response({
-                'code': request.status.HTTP_200_OK,
+                'code': status.HTTP_200_OK,
                 'response': "Data created successfully",
                 'data': serializer.data
 
             })
         else:
             return Response({
-                'code': request.status.HTTP_400_BAD_REQUEST,
+                'code': status.HTTP_400_BAD_REQUEST,
                 'response': "Data not found",
                 'error': serializer.errors
             })
 
     except Exception as e:
         return Response({
-            'code': request.status.HTTP_400_BAD_REQUEST,
+            'code': status.HTTP_400_BAD_REQUEST,
             'response': "Data not found",
             'error': str(e)
         })
@@ -185,11 +186,11 @@ def delete_location(request, pk=None):
     try:
         location = Location.objects.get(pk=id)
         location.delete()
-        return Response({'code': request.status.HTTP_200_OK,'msg': 'Data Deleted'})
+        return Response({'code': status.HTTP_200_OK,'msg': 'Data Deleted'})
 
     except Exception as e:
         return Response({
-            'code': request.status.HTTP_400_BAD_REQUEST,
+            'code': status.HTTP_400_BAD_REQUEST,
             'response': "Data not found",
             'error': str(e)
         })

@@ -11,12 +11,14 @@ def generate_filename(instance, filename):
 
 # Create your models here.
 class Event(models.Model):
-    event_name = models.CharField(max_length=200)
+    event_name = models.CharField(max_length=500)
     event_image = models.ImageField(upload_to=generate_filename, null=True)
     banner_image = models.ImageField(upload_to=generate_filename, null=True)
     details = models.TextField(null=True)
     trending = models.BooleanField(default=False)
     slug = models.SlugField(max_length=255, null=True, unique=True)
+    price = models.CharField(max_length=200, null=True, blank=True)
+    nod = models.CharField(max_length=200, null=True)
     location = models.ForeignKey(Location, default=None, on_delete=models.CASCADE, related_name='events')
 
     def __str__(self):

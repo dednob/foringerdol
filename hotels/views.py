@@ -8,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 import base64
 from django.core.files.base import ContentFile
 from django.utils.text import slugify
+from rest_framework import status
 
 
 
@@ -20,7 +21,7 @@ def get_hotel(request, pk=None):
             hotel = Hotel.objects.get(id=id)
             serializer = HotelReadSerializer(hotel)
             return Response({
-                'code': request.status.HTTP_200_OK,
+                'code': status.HTTP_200_OK,
                 'response': "Received data Successfully",
                 'data': serializer.data
 
@@ -28,7 +29,7 @@ def get_hotel(request, pk=None):
         hotels = Hotel.objects.all()
         serializer = HotelReadSerializer(hotels, many=True)
         return Response({
-                'code': request.status.HTTP_200_OK,
+                'code': status.HTTP_200_OK,
                 'response': "Received data Successfully",
                 'data': serializer.data
 
@@ -36,7 +37,7 @@ def get_hotel(request, pk=None):
 
     except Exception as e:
         return Response({
-            'code': request.status.HTTP_400_BAD_REQUEST,
+            'code': status.HTTP_400_BAD_REQUEST,
             'response': "Data not found",
             'error': str(e)
         })
@@ -52,7 +53,7 @@ def hotels_by_location(request, locationid):
     
     except Exception as e:
         return Response({
-            'code': request.status.HTTP_400_BAD_REQUEST,
+            'code': status.HTTP_400_BAD_REQUEST,
             'response': "Data not found",
             'error': str(e)
         })
@@ -63,7 +64,7 @@ def hotels_by_location(request, locationid):
 def create_hotel(request):
     try:
         hotel_data = request.data
-        if 'hotel_image' in hotel_data and hotel_data['event_image']!=None:
+        if 'hotel_image' in hotel_data and hotel_data['hotel_image']!=None:
             fmt, img_str = str(hotel_data['hotel_image']).split(';base64,')
             ext = fmt.split('/')[-1]
             img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
@@ -95,21 +96,21 @@ def create_hotel(request):
             serializer.save()
             
             return Response({
-                'code': request.status.HTTP_200_OK,
+                'code': status.HTTP_200_OK,
                 'response': "Data created successfully",
                 'data': serializer.data
 
             })
         else:
             return Response({
-                'code': request.status.HTTP_400_BAD_REQUEST,
+                'code': status.HTTP_400_BAD_REQUEST,
                 'response': "Data not found",
                 'error': serializer.errors
             })
 
     except Exception as e:
         return Response({
-            'code': request.status.HTTP_400_BAD_REQUEST,
+            'code': status.HTTP_400_BAD_REQUEST,
             'response': "Data not found",
             'error': str(e)
         })
@@ -138,21 +139,21 @@ def complete_update_hotel(request, pk=None):
         if serializer.is_valid():
             serializer.save()
             return Response({
-                'code': request.status.HTTP_200_OK,
+                'code': status.HTTP_200_OK,
                 'response': "Data created successfully",
                 'data': serializer.data
 
             })
         else:
             return Response({
-                'code': request.status.HTTP_400_BAD_REQUEST,
+                'code': status.HTTP_400_BAD_REQUEST,
                 'response': "Data not found",
                 'error': serializer.errors
             })
 
     except Exception as e:
         return Response({
-            'code': request.status.HTTP_400_BAD_REQUEST,
+            'code': status.HTTP_400_BAD_REQUEST,
             'response': "Data not found",
             'error': str(e)
         })
@@ -177,11 +178,30 @@ def delete_hotel(request, pk=None):
     try:
         hotel = Hotel.objects.get(pk=id)
         hotel.delete()
-        return Response({'code': request.status.HTTP_200_OK,'msg': 'Hotel data Deleted'})
+        return Response({'code':status.HTTP_200_OK,'msg': 'Hotel data Deleted'})
         
     except Exception as e:
         return Response({
-            'code': request.status.HTTP_400_BAD_REQUEST,
+            'code': status.HTTP_400_BAD_REQUEST,
+            'response': "Data not found",
+            'error': str(e)
+        })
+
+@api_view(['GET'])
+def popular_hotels(request):
+    try:
+        events = Hotel.objects.filter(popular=True)
+        serializer = HotelReadSerializer(events, many=True)
+        return Response({
+                'code': status.HTTP_200_OK,
+                'response': "Received data Successfully",
+                'data': serializer.data
+
+            })
+
+    except Exception as e:
+        return Response({
+            'code': status.HTTP_400_BAD_REQUEST,
             'response': "Data not found",
             'error': str(e)
         })

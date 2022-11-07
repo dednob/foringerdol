@@ -7,6 +7,7 @@ urlpatterns = [
     path('list/', views.get_hotel),
     path('details/<int:pk>', views.get_hotel),
     path('bylocation/<int:locationid>', views.hotels_by_location),
+    path('popular/', views.popular_hotels),
     path('create/', views.create_hotel),
     path('update/<int:pk>', views.complete_update_hotel),
     path('partialUpdate/<int:pk>', views.partial_update_hotel),

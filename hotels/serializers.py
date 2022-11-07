@@ -9,14 +9,14 @@ class HotelReadSerializer(serializers.ModelSerializer):
     def location_name(self, obj): 
         location_instance = Location.objects.get(id=obj.location.id)
         
-        return LocationSerializer(location_instance).data
+        return LocationSerializerRef(location_instance).data
 
     class Meta:
         model = Hotel
-        fields = ['id', 'hotel_name',  'price', 'location', 'details', 'slug','hotel_image', 'banner_image']
+        fields = ['id', 'hotel_name','popular',  'price', 'location', 'details', 'slug','hotel_image', 'banner_image']
 
 class HotelSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Hotel
-        fields = ['id', 'hotel_name',  'price', 'location', 'details', 'slug','hotel_image', 'banner_image']
+        fields = ['id', 'hotel_name', 'price','popular', 'location', 'details', 'slug','hotel_image', 'banner_image']
