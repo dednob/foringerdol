@@ -117,9 +117,6 @@ def delete_event(request, pk=None):
     event = Event.objects.get(pk=id)
     event.delete()
     return Response({'msg': 'Data Deleted'})
-from django.shortcuts import render
-
-# Create your views here.
 
 @api_view(['GET'])
 def trending_event(request):
