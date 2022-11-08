@@ -126,22 +126,37 @@ def create_event(request):
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
 def complete_update_event(request, pk=None):
-    id = pk
+    
     try:
+        id = pk
+        event =Event.objects.get(id=id)
         event_data = request.data
-        if 'event_image' in event_data:
+        
+        
+        if ('event_image' in event_data and event_data['event_image']==None) and event.event_image!=None:
+            
+            event_data.pop('event_image')
+        if ('banner_image' in event_data and event_data['banner_image']==None) and event.banner_image!=None:
+            
+            event_data.pop('banner_image')
+        
+        
+        if 'event_image' in event_data and event_data['event_image']!=None:
             fmt, img_str = str(event_data['event_image']).split(';base64,')
             ext = fmt.split('/')[-1]
             img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
             event_data['event_image'] = img_file
         
-        if 'banner_image' in event_data:
+        if 'banner_image' in event_data and event_data['banner_image']!=None:
             fmt, img_str = str(event_data['banner_image']).split(';base64,')
             ext = fmt.split('/')[-1]
             img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
             event_data['banner_image'] = img_file
 
-        event =Event.objects.get(id=id)
+        
+
+        
+
         serializer = EventSerializer(event, data= event_data)
         if serializer.is_valid():
             serializer.save()

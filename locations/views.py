@@ -67,11 +67,11 @@ def location_by_category(request, pk):
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def create_location(request):
     try:
         location_data = request.data
-        
+        slug=None
         if 'location_image' in location_data and location_data['location_image']!=None:
             fmt, img_str = str(location_data['location_image']).split(';base64,')
             ext = fmt.split('/')[-1]
@@ -124,24 +124,37 @@ def create_location(request):
 
 
 @api_view(['PATCH'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def complete_update(request, pk=None):
     try:
+        id = pk
+        location = Location.objects.get(id=id)
         location_data = request.data
-        if 'location_image' in location_data:
+        print(location_data)
+        
+        if ('location_image' in location_data and location_data['location_image']==None) and location.location_image!=None:
+            print('hello')
+            location_data.pop('location_image')
+        if ('banner_image' in location_data and location_data['banner_image']==None) and location.banner_image!=None:
+            print('hello2')
+            location_data.pop('banner_image')
+           
+        print(location_data)
+        if 'location_image' in location_data and location_data['location_image']!=None:
             fmt, img_str = str(location_data['location_image']).split(';base64,')
             ext = fmt.split('/')[-1]
             img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
             location_data['location_image'] = img_file
         
-        if 'banner_image' in location_data:
+        if 'banner_image' in location_data and location_data['banner_image']!=None:
             fmt, img_str = str(location_data['banner_image']).split(';base64,')
             ext = fmt.split('/')[-1]
             img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
             location_data['banner_image'] = img_file
 
-        id = pk
-        location = Location.objects.get(id=id)
+            
+
+        
         serializer = LocationSerializer(location, data=location_data)
         if serializer.is_valid():
             serializer.save()

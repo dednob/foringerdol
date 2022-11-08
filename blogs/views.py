@@ -130,14 +130,25 @@ def create_blog(request):
 @permission_classes([IsAuthenticated])
 def update_blog(request, pk):
     try: 
+        id = pk
+        blog = Blog.objects.get(id = id)
         blog_data = request.data
-        if 'blog_image' in blog_data:
+        
+        
+        if ('blog_image' in blog_data and blog_data['blog_image']==None) and blog.blog_image!=None:
+            
+            blog_data.pop('blog_image')
+        if ('banner_image' in blog_data and blog_data['banner_image']==None) and blog.banner_image!=None:
+            
+            blog_data.pop('banner_image')
+        
+        if 'blog_image' in blog_data and blog_data['blog_image']!=None:
             fmt, img_str = str(blog_data['blog_image']).split(';base64,')
             ext = fmt.split('/')[-1]
             img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
             blog_data['blog_image'] = img_file
         
-        if 'banner_image' in blog_data:
+        if 'banner_image' in blog_data and blog_data['banner_image']!=None:
             fmt, img_str = str(blog_data['banner_image']).split(';base64,')
             ext = fmt.split('/')[-1]
             img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
@@ -158,7 +169,9 @@ def update_blog(request, pk):
                 
         blog_data['slug']=slug
 
-        blog = Blog.objects.get(id=pk)
+        
+        
+
         serializer = BlogSerializer(blog, data = blog_data, partial = True)
         if serializer.is_valid():
             serializer.save()

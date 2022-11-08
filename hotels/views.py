@@ -120,21 +120,35 @@ def create_hotel(request):
 @permission_classes([IsAuthenticated])
 def complete_update_hotel(request, pk=None):
     try:
+        id = pk
+        hotel = Hotel.objects.get(id=id)
         hotel_data = request.data
-        if 'hotel_image' in hotel_data:
+        
+        
+        if ('hotel_image' in hotel_data and hotel_data['hotel_image']==None) and hotel.hotel_image!=None:
+            
+            hotel_data.pop('hotel_image')
+
+        if ('banner_image' in hotel_data and hotel_data['banner_image']==None) and hotel.banner_image!=None:
+            
+            hotel_data.pop('banner_image')
+        
+        if 'hotel_image' in hotel_data and hotel_data['hotel_image']!=None:
             fmt, img_str = str(hotel_data['hotel_image']).split(';base64,')
             ext = fmt.split('/')[-1]
             img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
             hotel_data['hotel_image'] = img_file
 
-        if 'banner_image' in hotel_data:
+        if 'banner_image' in hotel_data and hotel_data['banner_image']!=None:
             fmt, img_str = str(hotel_data['banner_image']).split(';base64,')
             ext = fmt.split('/')[-1]
             img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
             hotel_data['banner_image'] = img_file
             
-        id = pk
-        hotel = Hotel.objects.get(id=id)
+        
+
+           
+
         serializer = HotelSerializer(hotel, data=request.data)
         if serializer.is_valid():
             serializer.save()
