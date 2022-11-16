@@ -49,7 +49,12 @@ def hotels_by_location(request, locationid):
     try:
         hotels = Hotel.objects.filter(location= locationid)
         serializer = HotelReadSerializer(hotels, many=True)
-        return Response(serializer.data)
+        return Response({
+                'code': status.HTTP_200_OK,
+                'response': "Received data Successfully",
+                'data': serializer.data
+
+            })
     
     except Exception as e:
         return Response({
@@ -154,7 +159,7 @@ def complete_update_hotel(request, pk=None):
             serializer.save()
             return Response({
                 'code': status.HTTP_200_OK,
-                'response': "Data created successfully",
+                'response': "Data updated successfully",
                 'data': serializer.data
 
             })
@@ -192,7 +197,7 @@ def delete_hotel(request, pk=None):
     try:
         hotel = Hotel.objects.get(pk=id)
         hotel.delete()
-        return Response({'code':status.HTTP_200_OK,'msg': 'Hotel data Deleted'})
+        return Response({'code':status.HTTP_200_OK,'response': 'Hotel data Deleted Successfully'})
         
     except Exception as e:
         return Response({

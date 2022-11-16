@@ -161,7 +161,7 @@ def complete_update(request, pk=None):
             
             return Response({
                 'code': status.HTTP_200_OK,
-                'response': "Data created successfully",
+                'response': "Data updated successfully",
                 'data': serializer.data
 
             })
@@ -199,7 +199,7 @@ def delete_location(request, pk=None):
     try:
         location = Location.objects.get(pk=id)
         location.delete()
-        return Response({'code': status.HTTP_200_OK,'msg': 'Data Deleted'})
+        return Response({'code': status.HTTP_200_OK,'response': 'Data Deleted Successfully'})
 
     except Exception as e:
         return Response({

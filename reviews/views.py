@@ -15,7 +15,12 @@ def review_list(request):
     try:
         review = Review.objects.all()
         serializer = ReviewSerializer(review, many = True)
-        return Response(serializer.data)
+        return Response({
+                'code': status.HTTP_200_OK,
+                'response': "Received data Successfully",
+                'data': serializer.data
+
+            })
     except Exception as e:
         return Response({
             'code': status.HTTP_400_BAD_REQUEST,
@@ -59,7 +64,7 @@ def update_review(request, pk):
             serializer.save()
             return Response({
                 'code': status.HTTP_200_OK,
-                'response': "Data created successfully",
+                'response': "Data updated successfully",
                 'data': serializer.data
 
             })
@@ -82,7 +87,7 @@ def delete_review(request,pk):
     try:
         review = Review.objects.get(id=pk)
         review.delete()
-        return Response({'code': status.HTTP_200_OK,'msg': 'Data Deleted'})
+        return Response({'code': status.HTTP_200_OK,'response': 'Data Deleted'})
     except Exception as e:
         return Response({
             'code': status.HTTP_400_BAD_REQUEST,

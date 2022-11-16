@@ -163,7 +163,7 @@ def complete_update_event(request, pk=None):
             
             return Response({
                 'code': status.HTTP_200_OK,
-                'response': "Data created successfully",
+                'response': "Data updated successfully",
                 'data': serializer.data
 
             })
@@ -201,7 +201,7 @@ def delete_event(request, pk=None):
     try: 
         event = Event.objects.get(pk=id)
         event.delete()
-        return Response({'code': status.HTTP_200_OK,'msg': 'Data Deleted'})
+        return Response({'code': status.HTTP_200_OK,'response': 'Data Deleted Successfully'})
 
     except Exception as e:
         return Response({
