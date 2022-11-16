@@ -14,11 +14,11 @@ from rest_framework import status
 
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
-def get_hotel(request, pk=None):
+def get_hotel(request, slug=None):
     try:
-        id = pk
-        if id is not None:
-            hotel = Hotel.objects.get(id=id)
+        slug = slug
+        if slug is not None:
+            hotel = Hotel.objects.get(slug=slug)
             serializer = HotelReadSerializer(hotel)
             return Response({
                 'code': status.HTTP_200_OK,
@@ -81,11 +81,11 @@ def create_hotel(request):
             img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
             hotel_data['banner_image'] = img_file
         
-        slug = slugify(hotel_data['hotel_name'])
+        # slug = slugify(hotel_data['hotel_name'])
         suffix=1
         # slug = "%s-%s" % (slugify(location_data['locations_name']), suffix)
-        if Hotel.objects.filter(hotel_name__exact=slug).exists():
-            count=Hotel.objects.filter(hotel_name__exact=slug).count()
+        if Hotel.objects.filter(hotel_name__exact=hotel_data['hotel_name']).exists():
+            count=Hotel.objects.filter(hotel_name__exact=hotel_data['hotel_name']).count()
             print(count)
             suffix+=count
             print("yes")
@@ -150,7 +150,19 @@ def complete_update_hotel(request, pk=None):
             img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
             hotel_data['banner_image'] = img_file
             
+        suffix=1
+        # slug = "%s-%s" % (slugify(location_data['locations_name']), suffix)
+        if Hotel.objects.filter(hotel_name__exact=hotel_data['hotel_name']).exists():
+            count=Hotel.objects.filter(hotel_name__exact=hotel_data['hotel_name']).count()
+            print(count)
+            suffix+=count
+            print("yes")
+            slug = "%s-%s" % (slugify(hotel_data['hotel_name']), suffix)
         
+        else:
+            slug = "%s-%s" % (slugify(hotel_data['hotel_name']), suffix)
+                
+        hotel_data['slug']=slug
 
            
 

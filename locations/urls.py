@@ -8,7 +8,7 @@ urlpatterns = [
    
     path('view/by-category/<str:pk>', views.location_by_category),
     
-    path('details/<int:pk>', views.view_location),
+    path('details/<str:slug>', views.view_location),
     path('create/', views.create_location),
     path('update/<int:pk>', views.complete_update),
     path('partialUpdate/<int:pk>', views.partial_update),

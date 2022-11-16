@@ -15,11 +15,11 @@ from rest_framework import status
 
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
-def get_events(request, pk=None):
-    id = pk
+def get_events(request, slug=None):
+    slug = slug
     try:
-        if id is not None:
-            event = Event.objects.get(id=id)
+        if slug is not None:
+            event = Event.objects.get(slug=slug)
             serializer = EventReadSerializer(event)
             return Response({
                 'code': status.HTTP_200_OK,
@@ -82,11 +82,11 @@ def create_event(request):
             img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
             event_data['banner_image'] = img_file
 
-        slug = slugify(event_data['event_name'])
+        # slug = slugify(event_data['event_name'])
         suffix=1
         # slug = "%s-%s" % (slugify(location_data['locations_name']), suffix)
-        if Event.objects.filter(event_name__exact=slug).exists():
-            count=Event.objects.filter(event_name__exact=slug).count()
+        if Event.objects.filter(event_name__exact=event_data['event_name']).exists():
+            count=Event.objects.filter(event_name__exact=event_data['event_name']).count()
             print(count)
             suffix+=count
             print("yes")
@@ -154,7 +154,19 @@ def complete_update_event(request, pk=None):
             event_data['banner_image'] = img_file
 
         
-
+        suffix=1
+        # slug = "%s-%s" % (slugify(location_data['locations_name']), suffix)
+        if Event.objects.filter(event_name__exact=event_data['event_name']).exists():
+            count=Event.objects.filter(event_name__exact=event_data['event_name']).count()
+            print(count)
+            suffix+=count
+            print("yes")
+            slug = "%s-%s" % (slugify(event_data['event_name']), suffix)
+        
+        else:
+            slug = "%s-%s" % (slugify(event_data['event_name']), suffix)
+                
+        event_data['slug']=slug
         
 
         serializer = EventSerializer(event, data= event_data)

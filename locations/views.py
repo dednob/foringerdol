@@ -13,11 +13,11 @@ from rest_framework import status
 
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
-def view_location(request, pk=None):
-    id = pk
+def view_location(request, slug=None):
+    slug = slug
     try:
         if id is not None:
-            location = Location.objects.get(id=id)
+            location = Location.objects.get(slug=slug)
             serializer = LocationSerializer(location)
             return Response({
                 'code': status.HTTP_200_OK,
@@ -84,11 +84,11 @@ def create_location(request):
             img_file = ContentFile(base64.b64decode(img_str), name='temp.' + ext)
             location_data['banner_image'] = img_file
         
-        slug = slugify(location_data['locations_name'])
+        # slug = slugify(location_data['locations_name'])
         suffix=1
         # slug = "%s-%s" % (slugify(location_data['locations_name']), suffix)
-        if Location.objects.filter(locations_name__exact=slug).exists():
-            count=Location.objects.filter(locations_name__exact=slug).count()
+        if Location.objects.filter(locations_name__exact=location_data['locations_name']).exists():
+            count=Location.objects.filter(locations_name__exact=location_data['locations_name']).count()
             print(count)
             suffix+=count
             print("yes")
@@ -153,7 +153,19 @@ def complete_update(request, pk=None):
             location_data['banner_image'] = img_file
 
             
-
+        suffix=1
+        # slug = "%s-%s" % (slugify(location_data['locations_name']), suffix)
+        if Location.objects.filter(locations_name__exact=location_data['locations_name']).exists():
+            count=Location.objects.filter(locations_name__exact=location_data['locations_name']).count()
+            print(count)
+            suffix+=count
+            print("yes")
+            slug = "%s-%s" % (slugify(location_data['locations_name']), suffix)
+        
+        else:
+            slug = "%s-%s" % (slugify(location_data['locations_name']), suffix)
+                
+        location_data['slug']=slug
         
         serializer = LocationSerializer(location, data=location_data)
         if serializer.is_valid():

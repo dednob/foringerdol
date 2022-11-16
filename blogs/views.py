@@ -53,16 +53,17 @@ def blog_list_count(request):
 
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
-def get_blog_detail(request, pk):
+def get_blog_detail(request, slug):
     try:
-        blog = Blog.objects.get(id=pk)
-        serializer = BlogSerializer(blog)
-        return Response({
-            'code': status.HTTP_200_OK,
-            'response': "Received data Successfully",
-            'data': serializer.data
+        if slug is not None:
+            blog = Blog.objects.get(slug=slug)
+            serializer = BlogSerializer(blog)
+            return Response({
+                'code': status.HTTP_200_OK,
+                'response': "Received data Successfully",
+                'data': serializer.data
 
-        })
+            })
     except Exception as e:
         return Response({
             'code': status.HTTP_400_BAD_REQUEST,
