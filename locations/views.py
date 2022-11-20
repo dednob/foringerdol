@@ -14,9 +14,9 @@ from rest_framework import status
 @api_view(['GET'])
 # @permission_classes([IsAuthenticated])
 def view_location(request, slug=None):
-    slug = slug
+    
     try:
-        if id is not None:
+        if slug is not None:
             location = Location.objects.get(slug=slug)
             serializer = LocationSerializer(location)
             return Response({
