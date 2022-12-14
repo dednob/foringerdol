@@ -244,3 +244,26 @@ def trending_event(request):
             'error': str(e)
         })
 
+
+@api_view(['GET'])
+def toggle_trending_event(request, pk):
+    try:
+        event = Event.objects.get(id=pk)
+        event.trending = not event.trending
+        event.save()
+        serializer = EventSerializer(event)
+        return Response({
+                'code': status.HTTP_200_OK,
+                'response': "Received data Successfully",
+                'data': serializer.data
+
+            })
+
+    except Exception as e:
+        return Response({
+            'code': status.HTTP_400_BAD_REQUEST,
+            'response': "Data not found",
+            'error': str(e)
+        })
+
+
