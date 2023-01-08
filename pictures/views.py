@@ -32,7 +32,7 @@ def get_pictures(request):
         })
 
 @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def update_picture(request):
     try:
         picture_data = request.data

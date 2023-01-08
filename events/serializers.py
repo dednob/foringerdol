@@ -23,3 +23,11 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = [ 'id','event_name','trending', 'event_image','banner_image', 'location', 'details', 'slug']
+
+
+
+class EventSerializerRef(serializers.ModelSerializer):   
+   
+    class Meta:
+        model = Event
+        fields = [ 'id','event_name','trending']
