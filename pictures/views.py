@@ -12,6 +12,25 @@ from rest_framework import status
 
 
 
+@api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+def get_pictures(request):
+    try:
+        picture = Pictures.objects.last()
+        serializer = PicturesSerializer(picture)
+        return Response({
+            'code': status.HTTP_200_OK,
+            'response': "Received data Successfully",
+            'data': serializer.data
+
+        })
+    except Exception as e:
+        return Response({
+            'code': status.HTTP_400_BAD_REQUEST,
+            'response': "Data not found",
+            'error': str(e)
+        })
+
 @api_view(['POST'])
 # @permission_classes([IsAuthenticated])
 def update_picture(request):
