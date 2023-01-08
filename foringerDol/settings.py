@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'hotels',
     'events',
     'tours',
+    'pictures',
     
 ]
 

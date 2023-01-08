@@ -31,6 +31,7 @@ urlpatterns = [
     path('tours/', include('tours.urls')), 
     path ('blogs/', include('blogs.urls')),
     path ('reviews/', include('reviews.urls')),
+    path ('pictures/', include('pictures.urls')),
 
 
     # path('detail/', product_views.product_detail, name="Product detail"),
