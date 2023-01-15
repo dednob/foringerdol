@@ -19,7 +19,7 @@ from rest_framework import status
 # Create, Delete, Get , Toggle
 
 @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def booking_list(request):
     try:
         booking = Booking.objects.all()
@@ -39,7 +39,7 @@ def booking_list(request):
 
 
 @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def get_booking_detail(request, pk):
     try:
         if pk is not None:
@@ -59,7 +59,7 @@ def get_booking_detail(request, pk):
         })
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def create_booking(request):
     try:
         booking_data = request.data
@@ -88,7 +88,7 @@ def create_booking(request):
 
 
 @api_view(['PATCH'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def update_blog(request, pk):
     try: 
         id = pk
@@ -139,6 +139,7 @@ def delete_booking(request,pk):
         })
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def toggle_payment_status(request, pk):
     try:
         booking = Booking.objects.get(id=pk)
