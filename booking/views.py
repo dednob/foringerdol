@@ -4,7 +4,7 @@ from events.models import Event
 from hotels.models import Hotel
 from locations.models import Location
 
-from .serializers import BookingSerializer
+from .serializers import BookingSerializer, BookingReadSerializer
 # Create your views here.
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -23,7 +23,7 @@ from rest_framework import status
 def booking_list(request):
     try:
         booking = Booking.objects.all()
-        serializer = BookingSerializer(booking, many = True)
+        serializer = BookingReadSerializer(booking, many = True)
         return Response({
             'code': status.HTTP_200_OK,
             'response': "Received data Successfully",
@@ -44,7 +44,7 @@ def get_booking_detail(request, pk):
     try:
         if pk is not None:
             booking = Booking.objects.get(id=pk)
-            serializer = BookingSerializer(booking)
+            serializer = BookingReadSerializer(booking)
             return Response({
                 'code': status.HTTP_200_OK,
                 'response': "Received data Successfully",
