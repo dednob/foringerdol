@@ -1,8 +1,8 @@
-/accounts/migrations/
-/blogs/migrations/
-/events/migrations/
-/hotels/migrations/
-/locations/migrations/
-/tours/migrations/
-/reviews/migrations/
+# /accounts/migrations/
+# /blogs/migrations/
+# /events/migrations/
+# /hotels/migrations/
+# /locations/migrations/
+# /tours/migrations/
+# /reviews/migrations/
 /media
