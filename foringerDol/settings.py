@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'tours',
     'pictures',
     'booking',
+    'packages',
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
